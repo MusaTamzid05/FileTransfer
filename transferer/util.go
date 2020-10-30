@@ -17,3 +17,20 @@ func ListFiles(path string) ([]string, error) {
 	return paths[1:], err
 
 }
+
+func GetSize(path string) (int64, error) {
+
+	fPtr, err := os.Open(path)
+
+	if err != nil {
+		return -1, err
+	}
+
+	info, err := fPtr.Stat()
+
+	if err != nil {
+		return -1, err
+	}
+
+	return info.Size(), nil
+}

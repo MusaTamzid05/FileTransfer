@@ -14,4 +14,5 @@ func main() {
 	}
 
 	fmt.Println("Zip complete")
+	fmt.Println(transferer.GetSize("test.zip"))
 }
