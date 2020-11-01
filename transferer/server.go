@@ -6,7 +6,6 @@ import (
 	"log"
 	"net"
 	"os"
-	"strconv"
 )
 
 type Server struct {
@@ -78,19 +77,6 @@ func (s *Server) Run() {
 
 func (s *Server) getFileName(conn net.Conn) (string, error) {
 	return s.readSmallBuffer(conn)
-}
-
-func (s *Server) getSize(conn net.Conn) (int, error) {
-
-	buffer, err := s.readSmallBuffer(conn)
-
-	if err != nil {
-		return 0, err
-	}
-
-	i, err := strconv.Atoi(buffer)
-
-	return i, err
 }
 
 func (s *Server) readSmallBuffer(conn net.Conn) (string, error) {

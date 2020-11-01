@@ -4,7 +4,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net"
-	"strconv"
 	"strings"
 )
 
@@ -36,16 +35,6 @@ func (c *Client) sendFileName(path string) {
 
 	data := strings.Split(path, "/")
 	c.conn.Write([]byte(data[len(data)-1]))
-}
-
-func (c *Client) sendFileSize(path string) {
-	size, err := GetSize(path)
-
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	c.conn.Write([]byte(strconv.Itoa(int(size))))
 }
 
 func (c *Client) sendFile(path string) {
