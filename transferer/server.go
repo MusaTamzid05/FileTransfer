@@ -1,9 +1,12 @@
 package transferer
 
 import (
+	"bytes"
 	"fmt"
+	"io"
 	"log"
 	"net"
+	"os"
 	"strconv"
 )
 
@@ -38,9 +41,25 @@ func (s *Server) handleClient(conn net.Conn) {
 	}
 
 	size, _ := s.getSize(conn)
-
 	fmt.Printf("%s = %d\n", fileName, size)
+	s.receiveData(fileName, conn)
 
+}
+
+func (s *Server) receiveData(dstPath string, conn net.Conn) {
+	log.Println("Receiving data :", dstPath)
+	var buffer bytes.Buffer
+	io.Copy(&buffer, conn)
+
+	f, err := os.Create(dstPath)
+
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	log.Println("Saving ..")
+	f.Write(buffer.Bytes())
 }
 
 func (s *Server) Run() {
