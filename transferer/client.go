@@ -61,11 +61,42 @@ func (c *Client) sendFile(path string) {
 	log.Printf("%s send.\n", path)
 }
 
+func (c *Client) zip(path string) (string, error) {
+	zipPath := path + ".zip"
+
+	zipper := NewFileZipper()
+	err := zipper.Zip(path, zipPath)
+
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	log.Println("Zip complete")
+	return zipPath, nil
+}
+
 func (c *Client) Run(path string) {
 
 	defer c.conn.Close()
+
+	isDir, err := IsDir(path)
+
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	if isDir {
+		log.Printf("%s is a directory.\n", path)
+		log.Println("Zipping it")
+		path, err = c.zip(path)
+
+		if err != nil {
+			log.Fatalln(err)
+		}
+
+		log.Println("New path ", path)
+	}
 	c.sendFileName(path)
-	c.sendFileSize(path)
 	c.sendFile(path)
 
 }

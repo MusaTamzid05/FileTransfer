@@ -34,3 +34,22 @@ func GetSize(path string) (int64, error) {
 
 	return info.Size(), nil
 }
+
+func IsDir(path string) (bool, error) {
+
+	file, err := os.Open(path)
+
+	if err != nil {
+		return false, err
+	}
+
+	defer file.Close()
+
+	fi, err := file.Stat()
+
+	if err != nil {
+		return false, err
+	}
+
+	return fi.IsDir(), nil
+}

@@ -2,7 +2,6 @@ package transferer
 
 import (
 	"bytes"
-	"fmt"
 	"io"
 	"log"
 	"net"
@@ -40,8 +39,6 @@ func (s *Server) handleClient(conn net.Conn) {
 		return
 	}
 
-	size, _ := s.getSize(conn)
-	fmt.Printf("%s = %d\n", fileName, size)
 	s.receiveData(fileName, conn)
 
 }
