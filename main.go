@@ -2,17 +2,26 @@ package main
 
 import (
 	"file_transferer/transferer"
-	"fmt"
+	"log"
 )
 
 func main() {
-	zipper := transferer.NewFileZipper()
-	err := zipper.Zip("/home/musa/alo", "test.zip")
+	/*
+		zipper := transferer.NewFileZipper()
+		err := zipper.Zip("/home/musa/alo", "test.zip")
+
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		fmt.Println("Zip complete")
+		fmt.Println(transferer.GetSize("test.zip"))
+	*/
+
+	server, err := transferer.NewServer(":8000")
 
 	if err != nil {
-		fmt.Println(err)
+		log.Fatalln(err)
 	}
-
-	fmt.Println("Zip complete")
-	fmt.Println(transferer.GetSize("test.zip"))
+	server.Run()
 }
