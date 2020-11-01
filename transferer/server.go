@@ -28,6 +28,14 @@ func (s *Server) handleClient(conn net.Conn) {
 	defer conn.Close()
 
 	log.Println("client address ", conn.LocalAddr().String())
+	fileName, err := s.getFileName(conn)
+
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	log.Println(fileName)
 	conn.Write([]byte("This is a message\n"))
 }
 
@@ -46,4 +54,16 @@ func (s *Server) Run() {
 		go s.handleClient(conn)
 	}
 
+}
+
+func (s *Server) getFileName(conn net.Conn) (string, error) {
+
+	buffer := make([]byte, 256)
+	n, err := conn.Read(buffer)
+
+	if err != nil {
+		return "", err
+	}
+
+	return string(buffer[:n]), nil
 }
