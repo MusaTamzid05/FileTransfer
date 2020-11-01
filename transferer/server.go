@@ -1,8 +1,10 @@
 package transferer
 
 import (
+	"fmt"
 	"log"
 	"net"
+	"strconv"
 )
 
 type Server struct {
@@ -35,10 +37,10 @@ func (s *Server) handleClient(conn net.Conn) {
 		return
 	}
 
-	s.getSize(conn)
+	size, _ := s.getSize(conn)
 
-	log.Println(fileName)
-	conn.Write([]byte("This is a message\n"))
+	fmt.Printf("%s = %d\n", fileName, size)
+
 }
 
 func (s *Server) Run() {
@@ -59,6 +61,23 @@ func (s *Server) Run() {
 }
 
 func (s *Server) getFileName(conn net.Conn) (string, error) {
+	return s.readSmallBuffer(conn)
+}
+
+func (s *Server) getSize(conn net.Conn) (int, error) {
+
+	buffer, err := s.readSmallBuffer(conn)
+
+	if err != nil {
+		return 0, err
+	}
+
+	i, err := strconv.Atoi(buffer)
+
+	return i, err
+}
+
+func (s *Server) readSmallBuffer(conn net.Conn) (string, error) {
 
 	buffer := make([]byte, 256)
 	n, err := conn.Read(buffer)
@@ -67,18 +86,6 @@ func (s *Server) getFileName(conn net.Conn) (string, error) {
 		return "", err
 	}
 
+	log.Println("")
 	return string(buffer[:n]), nil
-}
-
-func (s *Server) getSize(conn net.Conn) error {
-
-	buffer := make([]byte, 256)
-	n, err := conn.Read(buffer)
-
-	if err != nil {
-		return err
-	}
-
-	log.Println(string(buffer[:n]))
-	return nil
 }

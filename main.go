@@ -5,6 +5,26 @@ import (
 	"log"
 )
 
+func RunServer(address string) {
+
+	server, err := transferer.NewServer(":8000")
+
+	if err != nil {
+		log.Fatalln(err)
+	}
+	server.Run()
+}
+
+func RunClient(address string) {
+
+	client, err := transferer.NewClient(":8000")
+
+	if err != nil {
+		log.Fatalln(err)
+	}
+	client.Run("/home/musa/avatar.jpg")
+}
+
 func main() {
 	/*
 		zipper := transferer.NewFileZipper()
@@ -18,10 +38,5 @@ func main() {
 		fmt.Println(transferer.GetSize("test.zip"))
 	*/
 
-	server, err := transferer.NewServer(":8000")
-
-	if err != nil {
-		log.Fatalln(err)
-	}
-	server.Run()
+	RunClient(":8000")
 }
