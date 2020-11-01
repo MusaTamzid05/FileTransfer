@@ -3,6 +3,7 @@ package transferer
 import (
 	"log"
 	"net"
+	"strconv"
 	"strings"
 )
 
@@ -36,9 +37,20 @@ func (c *Client) sendFileName(path string) {
 	c.conn.Write([]byte(data[len(data)-1]))
 }
 
+func (c *Client) sendFileSize(path string) {
+	size, err := GetSize(path)
+
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	c.conn.Write([]byte(strconv.Itoa(int(size))))
+}
+
 func (c *Client) Run(path string) {
 
 	defer c.conn.Close()
 	c.sendFileName(path)
+	c.sendFileSize(path)
 
 }

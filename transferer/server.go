@@ -35,6 +35,8 @@ func (s *Server) handleClient(conn net.Conn) {
 		return
 	}
 
+	s.getSize(conn)
+
 	log.Println(fileName)
 	conn.Write([]byte("This is a message\n"))
 }
@@ -66,4 +68,17 @@ func (s *Server) getFileName(conn net.Conn) (string, error) {
 	}
 
 	return string(buffer[:n]), nil
+}
+
+func (s *Server) getSize(conn net.Conn) error {
+
+	buffer := make([]byte, 256)
+	n, err := conn.Read(buffer)
+
+	if err != nil {
+		return err
+	}
+
+	log.Println(string(buffer[:n]))
+	return nil
 }
