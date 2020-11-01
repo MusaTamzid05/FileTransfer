@@ -4,6 +4,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net"
+	"os"
 	"strings"
 )
 
@@ -67,6 +68,7 @@ func (c *Client) zip(path string) (string, error) {
 func (c *Client) Run(path string) {
 
 	defer c.conn.Close()
+	zipped := false
 
 	isDir, err := IsDir(path)
 
@@ -84,8 +86,15 @@ func (c *Client) Run(path string) {
 		}
 
 		log.Println("New path ", path)
+		zipped = true
 	}
 	c.sendFileName(path)
 	c.sendFile(path)
+
+	if zipped {
+		log.Println("Removing ", path)
+		os.Remove(path)
+		log.Println("Removed ", path)
+	}
 
 }
