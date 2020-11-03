@@ -9,7 +9,7 @@ import (
 
 func RunServer(address string) {
 
-	server, err := transferer.NewServer(":8000")
+	server, err := transferer.NewServer(address)
 
 	if err != nil {
 		log.Fatalln(err)
@@ -19,7 +19,7 @@ func RunServer(address string) {
 
 func RunClient(address, path string) {
 
-	client, err := transferer.NewClient(":8000")
+	client, err := transferer.NewClient(address)
 
 	if err != nil {
 		log.Fatalln(err)
